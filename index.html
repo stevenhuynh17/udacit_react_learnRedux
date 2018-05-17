@@ -9,34 +9,12 @@
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   </head>
   <body>
-    <div class="">
-      <h1>Todo List</h1>
-      <input id="todo" type="text" placeholder="Add Todo">
-      <button id="todoBtn">Add Todo</button>
-      <ul id="todos">
-
-      </ul>
-    </div>
-    <div class="">
-      <h1>Goals</h1>
-      <input id="goal" type="text" placeholder="Add Goal">
-      <button id="goalBtn">Add Goal</button>
-      <ul id="goals">
-
-      </ul>
-    </div>
-    <hr>
     <div id="app"></div>
     <script type="text/javascript">
-
-
 
     function generateID() {
       return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
     }
-
-    // Library Code
-
 
     // App Code
     const ADD_TODO = 'ADD_TODO'
@@ -131,82 +109,6 @@
       goals,
     }), Redux.applyMiddleware(checker, logger))
 
-    store.subscribe(() => {
-      const { goals, todos } = store.getState()
-
-      document.getElementById('goals').innerHTML = ''
-      document.getElementById('todos').innerHTML = ''
-
-      goals.forEach(addGoalToDOM)
-      todos.forEach(addTodoToDOM)
-    })
-
-    function addTodo() {
-      const input = document.getElementById('todo')
-      const name = input.value
-      input.value = ''
-
-      store.dispatch(addTodoAction({
-        id: generateID(),
-        name,
-        complete: false,
-      }))
-    }
-
-    function addGoal() {
-      const input = document.getElementById('goal')
-      const name = input.value
-      input.value = ''
-
-      store.dispatch(addGoalAction({
-        id: generateID(),
-        name,
-      }))
-    }
-
-    document.getElementById('todoBtn')
-      .addEventListener('click', addTodo)
-
-    document.getElementById('goalBtn')
-      .addEventListener('click', addGoal)
-
-    function createRemoveButton(onClick) {
-      const removeBtn = document.createElement('button')
-      removeBtn.innerHTML = 'X'
-      removeBtn.addEventListener('click', onClick)
-      return removeBtn
-    }
-
-    function addTodoToDOM(todo){
-      const node = document.createElement('li')
-      const text = document.createTextNode(todo.name)
-      const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeTodoAction(todo.id))
-      })
-      node.appendChild(text)
-      node.style.textDecoration = todo.complete ? 'line-through' : 'none'
-      node.addEventListener('click', () => {
-        store.dispatch(toggleTodoAction(todo.id))
-      })
-      node.appendChild(removeBtn)
-
-      document.getElementById('todos')
-        .append(node)
-    }
-
-    function addGoalToDOM(goal) {
-      const node = document.createElement('li')
-      const text = document.createTextNode(goal.name)
-      const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeGoalAction(goal.id))
-      })
-      node.appendChild(text)
-      node.appendChild(removeBtn)
-
-      document.getElementById('goals')
-        .append(node)
-    }
-
     </script>
     <script type="text/babel">
       function List (props) {
@@ -214,7 +116,10 @@
           <ul>
             {props.items.map((item) => (
               <li key={item.id}>
-                <span>
+                <span
+                  onClick={() => props.toggle && props.toggle(item.id)}
+                  style={{textDecoration: item.complete ? 'line-through' : 'none'}}
+                >
                   {item.name}
                 </span>
                 <button onClick={() => props.remove(item)}>
@@ -242,6 +147,9 @@
         removeItem = (todo) => {
           this.props.store.dispatch(removeTodoAction(todo.id))
         }
+        toggleItem = (id) => {
+          this.props.store.dispatch(toggleTodoAction(id))
+        }
         render() {
           return(
             <div>
@@ -255,6 +163,7 @@
               <List
                 items={this.props.todos}
                 remove={this.removeItem}
+                toggle={this.toggleItem}
               />
             </div>
           )
