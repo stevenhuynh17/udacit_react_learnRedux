@@ -95,6 +95,17 @@
       }
     }
 
+    function handleToggleTodo(id) {
+      return (dispatch) => {
+        dispatch(toggleTodoAction(id))
+        return API.saveTodoToggle(id)
+          .catch(() => {
+            dispatch(toggleTodoAction(id))
+            alert("Error occured")
+          })
+      }
+    }
+
     function handleAddGoal(name, cb) {
       return (dispatch) => {
         return API.saveGoal(name)
@@ -162,11 +173,9 @@
       if(action.type === ADD_TODO && action.todo.name.toLowerCase().includes('bitcoin')){
         return alert("NOPE. That's a bad idea.")
       }
-
       if(action.type === ADD_GOAL && action.goal.name.toLowerCase().includes('bitcoin')){
         return alert("NOPE. That's a bad idea.")
       }
-
       return next(action)
     }
 
@@ -221,14 +230,7 @@
         }
 
         toggleItem = (id) => {
-
-          this.props.store.dispatch(toggleTodoAction(id))
-
-          return API.saveTodoToggle(id)
-            .catch(() => {
-              this.props.store.dispatch(toggleTodoAction(id))
-              alert("Error occured")
-            })
+          this.props.store.dispatch(handleToggleTodo(id))
         }
         render() {
           return(
