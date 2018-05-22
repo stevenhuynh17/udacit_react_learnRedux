@@ -311,12 +311,25 @@
           return (
             <div>
               <Todos todos={todos} store={this.props.store}/>
-              <Goals goals={goals} store={this.props.store}/>
+              <ConnectedGoals />
             </div>
           )
         }
       }
       const Context = React.createContext()
+
+      class ConnectedGoals extends React.Compoenent {
+        render() {
+          return (
+            <Context.Consumer>
+              {(store) => (
+                const { goals } = store.getState()
+                return <Goals goals={goals} dispatch={store.dispatch} />
+              )}
+            </Context.Consumer>
+          )
+        }
+      }
 
       class ConnectedApp extends React.Component {
         render() {
