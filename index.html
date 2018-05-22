@@ -296,9 +296,7 @@
       class App extends React.Component {
         componentDidMount() {
           const { store } = this.props
-
           store.dispatch(handleInitialData())
-
           store.subscribe(() => this.forceUpdate())
         }
 
@@ -318,9 +316,34 @@
           )
         }
       }
+      const Context = React.createContext()
+
+      class ConnectedApp extends React.Component {
+        render() {
+          return (
+            <Context.Consumer>
+              {(store) => (
+                <App store={store} />
+              )}
+            </Context.Consumer>
+          )
+        }
+      }
+
+      class Provider extends React.Compoenent {
+        render() {
+          return(
+            <Context.Provider value={this.props.store}>
+              {this.props.children}
+            </Context.Provider>
+          )
+        }
+      }
 
       ReactDOM.render(
-        <App store={store}/>,
+        <Provider store={store}>
+          <App />
+        </Provider>,
         document.getElementById('app')
       )
     </script>
