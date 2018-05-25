@@ -1,4 +1,4 @@
-import API from 'goals-todo-api'
+import API from 'goals-todos-api'
 
 export const ADD_TODO = 'ADD_TODO'
 export const REMOVE_TODO = 'REMOVE_TODO'
@@ -31,7 +31,7 @@ export function handleAddTodo(name, cb) {
     return API.saveTodo(name)
       .then((todo) => {
         dispatch(addTodo(todo))
-        cb
+        cb()
       })
       .catch(() => {
         alert("There's a problem")
