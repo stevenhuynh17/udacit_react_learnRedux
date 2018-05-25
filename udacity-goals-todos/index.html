@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Udacity Todos Goals</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
+    <script src="https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://tylermcginnis.com/goals-todos-api/index.js"></script>
+    <script src="https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js"></script>
+    <script src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript">
+
+    function generateID() {
+      return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+    }
+
+    const store = Redux.createStore(Redux.combineReducers({
+      todos,
+      goals,
+      loading,
+    }), Redux.applyMiddleware(ReduxThunk.default, checker, logger))
+
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(
+        <ReactRedux.Provider store={store}>
+          <ConnectedApp />
+        </ReactRedux.Provider>,
+        document.getElementById('app')
+      )
+    </script>
+    <!-- <script type="text/javascript" src="index.js"></script> -->
+  </body>
+</html>
